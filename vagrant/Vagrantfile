@@ -3,7 +3,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "host1" do |subconfigs|
     subconfigs.vm.box = "centos/7"
     subconfigs.vm.hostname="host1"
-    subconfigs.vm.network :private_network, ip: "10.10.0.1"
+    subconfigs.vm.network :private_network, ip: "10.0.2.100"
     subconfigs.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
       vb.cpus = "1"
@@ -15,13 +15,16 @@ Vagrant.configure(2) do |config|
     systemctl start docker
     curl -SL https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
+    usermod -aG docker vagrant
+    git clone https://github.com/SergeyKa-cmd/vagrant_tasks.git
+    cd /home/vagrant/vagrant_tasks/haproxy-keepalived-docker && docker-compose up -d keepalived-b haproxy-a haproxy-b web-a web-b
     SHELL
   end
 
   config.vm.define "host2" do |subconfigs|
     subconfigs.vm.box = "centos/7"
     subconfigs.vm.hostname="host2"
-    subconfigs.vm.network :private_network, ip: "10.10.0.2"
+    subconfigs.vm.network :private_network, ip: "10.0.2.200"
     subconfigs.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
       vb.cpus = "1"
@@ -33,6 +36,9 @@ Vagrant.configure(2) do |config|
     systemctl start docker
     curl -SL https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
+    usermod -aG docker vagrant
+    git clone https://github.com/SergeyKa-cmd/vagrant_tasks.git
+    cd /home/vagrant/vagrant_tasks/haproxy-keepalived-docker && docker-compose up -d keepalived-b haproxy-a haproxy-b web-a web-b
     SHELL
   end
 
