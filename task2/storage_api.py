@@ -91,19 +91,17 @@ def key_get_handler():
 ##POST key-value
 @app.route('/api/v1/storage/json/write', methods=['POST'])
 def post_handler():
+    #Check command condition
     if not flask.request.json:
-         flask.abort(400)
-    req_data = {
-        'key': flask.request.json.get('key'),
-        #'value': flask.request.json.get('value')
-    }
-    tmp = 'key11'
-    #print(req_data)
-    # req_data = flask.request.get_json()
-    # key = req_data['key']
-    # value = req_data['value']
-    pull_data(tmp, req_data['key'])
-    return (f'Success add data {req_data}.')
+        flask.abort(400)
+    #Serialization JSON to dict
+    parse_json = flask.request.json
+    data_dict = json.dumps(parse_json)
+    #Parse key-values to arguments
+    for key, value in parse_json.items():
+        #Pass arguments to function
+        pull_data(key, value)
+    return (f'Success add data {data_dict}.')
 
 if __name__ == "__main__":
   #app.debug = True
