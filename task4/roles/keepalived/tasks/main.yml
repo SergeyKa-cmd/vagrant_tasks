@@ -1,0 +1,46 @@
+---
+# tasks file for keepalived
+- name: Keepalived | Install package
+  yum:
+    name: keepalived
+    state: present
+  tags:
+    - keeplaived-package
+- name: Keepalived | configuration files for VI_1
+  template:
+    src: ../templates/keepalived_VI_1.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify:
+    - reload keeaplived
+  tags:
+    - keepalived-configuration
+  when: ansible_hostname == "ha1"
+- name: Keepalived | configuration files for VI_2
+  template:
+    src: ../templates/keepalived_VI_2.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify:
+    - reload keeaplived
+  tags:
+    - keepalived-configuration
+  when: ansible_hostname == "ha2"
+- name: Keepalived | start service
+  service:
+    name: keepalived
+    state: running
+  tags:
+    - keepalived-service
+- name: Keepalived | add iptables rule
+  ansible.builtin.iptables:
+    chain: INPUT
+    source: 224.0.0.0/8
+    in_interface: eth0
+    jump: ACCEPT
+  become: yes
+- name: Keepalived VI_1 | add iptables rule
+  ansible.builtin.iptables:
+    chain: INPUT
+    in_interface: eth0
+    destination_port: vrrp
+    jump: ACCEPT
+  become: yes

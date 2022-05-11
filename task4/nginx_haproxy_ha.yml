@@ -1,0 +1,15 @@
+---
+- name: Provision lb servers
+  hosts: loadbalancers
+  gather_facts: true
+  become: true
+  roles:
+    - ha-proxy
+    - keepalived
+
+- name: Provision web servers
+  hosts: webservers
+  gather_facts: true
+  become: true
+  roles:
+    - nginx
