@@ -1,7 +1,14 @@
-Задания для проверки знаний по:
-Python
-Python Rest API
-HAProxy
-Keepalived
-Nginx
-Ansible
+Learning tasks for:
+----
+- Python
+----
+- Python Rest API
+----
+- HAProxy
+----
+- Keepalived
+----
+- Nginx
+----
+- Ansible
+----

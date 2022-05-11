@@ -1,4 +1,4 @@
-##How to run in Linux
+## How to run in Linux
 1. Clone this repo
 
 2. Install python venv
@@ -9,7 +9,7 @@
 
 5. cat /tmp/storage.data
 
-##How to run in Windows
+## How to run in Windows
 
 1. Copy file storage.py
 
