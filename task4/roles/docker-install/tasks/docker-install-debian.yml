@@ -1,0 +1,46 @@
+---
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name:
+      - docker
+      - docker-engine
+    state: absent
+
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+    - gnupg
+
+- name: Add Docker GPG key
+  apt_key:
+    url: "{{ docker_apt_gpg }}" 
+    id: 0EBFCD88
+    state: present
+
+- name: Add Docker repo
+  apt_repository:
+    repo: "{{ docker_apt_repo }}" 
+    state: present
+    update_cache: yes
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: latest
+
+- name: Install docker-compose
+  get_url:
+    url : "{{ docker-compose_url }}" 
+    dest: /usr/local/bin/docker-compose
+    mode: 'u+x,g+x'
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes        

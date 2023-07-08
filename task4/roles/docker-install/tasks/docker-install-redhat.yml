@@ -1,0 +1,47 @@
+---
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name:
+      - docker
+      - docker-common
+      - docker-engine
+    state: absent
+
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+- name: Add Docker GPG key
+  rpm_key:
+    url: "{{ docker_yum_gpg }}" 
+    id: 0EBFCD88
+    state: present
+
+- name: Add Docker repo
+  get_url:
+    url: "{{ docker_yum_repo }}"
+    dest: '/etc/yum.repos.d/docker-ce.repo'
+    state: present
+    update_cache: yes
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    state: latest
+
+- name: Install docker-compose
+  get_url:
+    url : "{{ docker-compose_link }}" 
+    dest: /usr/local/bin/docker-compose
+    mode: 'u+x,g+x'
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes        
