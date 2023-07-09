@@ -1,0 +1,25 @@
+---
+# tasks file for docker-delivery
+- hosts: build_host
+  gather_facts: no
+  tasks:
+    - name: build container image
+      docker_image:
+        name: app:v.0.1
+        build:
+          path: ./files
+          source: build
+        state: present
+
+    - name: archive container image as a tarball
+      docker_image:
+        name: app:v.0.1
+        archive_path: /home/vagrant/app_v0_1.tar
+        source: pull
+        state: present
+
+    - name: fetch archived image
+      fetch:
+        src: /home/vagrant/app_v0_1.tar
+        dest: ./app_v0_1.tar
+        flat: true

@@ -1,0 +1,4 @@
+---
+# tasks file for docker-delivery
+- include_tasks: docker-copy.yml
+- include_tasks: docker-delivery.yml

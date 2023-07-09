@@ -1,46 +1,70 @@
 ---
 # tasks file for keepalived
-- name: Keepalived | Install package
+- name: Keepalived Install package
   yum:
     name: keepalived
     state: present
-  tags:
-    - keeplaived-package
-- name: Keepalived | configuration files for VI_1
+  when: ansible_os_family == "RedHat"
+
+- name: Keepalived Install package
+  apt:
+    name: keepalived
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Keepalived configuration files for VI_1
   template:
     src: ../templates/keepalived_VI_1.conf.j2
     dest: /etc/keepalived/keepalived.conf
   notify:
     - reload keeaplived
-  tags:
-    - keepalived-configuration
-  when: ansible_hostname == "ha1"
-- name: Keepalived | configuration files for VI_2
+  when: ansible_hostname == "worker01"
+
+- name: Keepalived configuration files for VI_2
   template:
     src: ../templates/keepalived_VI_2.conf.j2
     dest: /etc/keepalived/keepalived.conf
   notify:
     - reload keeaplived
-  tags:
-    - keepalived-configuration
-  when: ansible_hostname == "ha2"
-- name: Keepalived | start service
+  when: ansible_hostname == "worker02"
+
+- name: Keepalived start service
   service:
     name: keepalived
     state: running
-  tags:
-    - keepalived-service
-- name: Keepalived | add iptables rule
+
+- name: Keepalived add iptables rule
+  ansible.builtin.iptables:
+    chain: INPUT
+    source: 224.0.0.0/8ip a
+    in_interface: eth1
+    jump: ACCEPT
+  become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Keepalived add iptables rule
   ansible.builtin.iptables:
     chain: INPUT
     source: 224.0.0.0/8
-    in_interface: eth0
+    in_interface: enp0s8
     jump: ACCEPT
   become: yes
+  when: ansible_os_family == "Debian"
+
 - name: Keepalived VI_1 | add iptables rule
   ansible.builtin.iptables:
     chain: INPUT
-    in_interface: eth0
+    in_interface: eth1
     destination_port: vrrp
     jump: ACCEPT
   become: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Keepalived VI_1 | add iptables rule
+  ansible.builtin.iptables:
+    chain: INPUT
+    in_interface: enp0s8
+    destination_port: vrrp
+    jump: ACCEPT
+  become: yes
+  when: ansible_os_family == "Debian"

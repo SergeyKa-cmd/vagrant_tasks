@@ -1,0 +1,16 @@
+---
+# tasks file for docker-run
+- name: Run docker-compose
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Tear down existing services
+      community.docker.docker_compose:
+        project_src: ./files
+        state: absent
+
+    - name: Create and start services
+      community.docker.docker_compose:
+        project_src: ./files
+        build: true
+

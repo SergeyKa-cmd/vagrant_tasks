@@ -1,0 +1,22 @@
+---
+# tasks file for ip-rules-allow
+- hosts: docker_hosts
+  gather_facts: no
+  tasks:
+    - name: Allow connections on multiple ports from bastion
+      ansible.builtin.iptables:
+        chain: INPUT
+        protocol: tcp
+        source: 10.10.0.10
+        destination_ports:
+          - "80"
+          - "443"
+          - "22:22"
+        jump: ACCEPT
+
+    - name: Allow output connection to bastion
+      ansible.builtin.iptables:
+        chain: OUTPUT
+        protocol: tcp
+        destination: 10.10.0.10     
+        jump: ACCEPT
