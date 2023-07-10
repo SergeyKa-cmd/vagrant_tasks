@@ -1,35 +1,31 @@
 ---
-# tasks file for ip-rules-allow
-- hosts: docker_hosts
-  gather_facts: no
-  tasks:
-    - name: Iptables flush filter
-      ansible.builtin.iptables:
-        chain: "{{ item }}"
-        flush: yes
-      with_items:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
+- name: Iptables flush filter
+  ansible.builtin.iptables:
+    chain: "{{ item }}"
+    flush: yes
+  with_items:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
 
-    - name: Iptables flush nat
-      ansible.builtin.iptables:
-        table: nat
-        chain: '{{ item }}'
-        flush: yes
-      with_items: [ 'INPUT', 'OUTPUT', 'PREROUTING', 'POSTROUTING' ]
-    
-    - name: Allow connections on multiple ports from bastion
-      ansible.builtin.iptables:
-        chain: INPUT
-        protocol: tcp
-        source: 10.10.0.10
-        destination_ports:
-          - "80"
-          - "443"
-          - "22:22"
-        jump: ACCEPT
+- name: Iptables flush nat
+  ansible.builtin.iptables:
+    table: nat
+    chain: '{{ item }}'
+    flush: yes
+  with_items: [ 'INPUT', 'OUTPUT', 'PREROUTING', 'POSTROUTING' ]
 
-    - name: Allow output connection to bastion
-      ansible.builtin.iptables:
-        chain: OUTPUT
-        protocol: tcp
-        destination: 10.10.0.10     
-        jump: ACCEPT
+- name: Allow connections on multiple ports from bastion
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    source: 10.10.0.10
+    destination_ports:
+      - "80"
+      - "443"
+      - "22:22"
+    jump: ACCEPT
+
+- name: Allow output connection to bastion
+  ansible.builtin.iptables:
+    chain: OUTPUT
+    protocol: tcp
+    destination: 10.10.0.10     
+    jump: ACCEPT

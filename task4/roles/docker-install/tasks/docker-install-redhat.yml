@@ -1,50 +1,52 @@
 ---
-- hosts: build_host
-  gather_facts: no
-  tasks:
-    - name: Ensure old versions of Docker are not installed.
-      package:
-        name:
-          - docker
-          - docker-common
-          - docker-engine
-        state: absent
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name:
+      - docker
+      - docker-common
+      - docker-engine
+    state: absent
 
-    - name: Install required packages
-      yum:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
 
-    - name: Add Docker GPG key
-      rpm_key:
-        url: "{{ docker_yum_gpg }}"
-        id: 0EBFCD88
-        state: present
+- name: Add Docker GPG key
+  ansible.builtin.rpm_key:
+    key: "{{ docker_yum_gpg }}"
+    state: present
 
-    - name: Add Docker repo
-      get_url:
-        url: "{{ docker_yum_repo }}"
-        dest: '/etc/yum.repos.d/docker-ce.repo'
-        state: present
-        update_cache: yes
+- name: Add Docker repo
+  ansible.builtin.yum_repository:
+    name: docker
+    description: docker repository
+    baseurl: "{{ docker_yum_repo }}"
+    enabled: true
+    gpgcheck: true
+    gpgkey: "{{ docker_yum_gpg }}"
+    #state: present
 
-    - name: Install Docker
-      apt:
-        name: docker-ce
-        state: latest
+- name: Install Docker
+  package:
+    name: 
+      - docker-ce
+      - containerd.io
+    state: latest
+    update_cache: yes
 
-    - name: Install docker-compose
-      get_url:
-        url : "{{ docker-compose_link }}"
-        dest: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
+- name: Install docker-compose
+  get_url:
+    url : "{{ docker-compose_link }}"
+    dest: /usr/local/bin/docker-compose
+    mode: 'u+x,g+x'
 
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes

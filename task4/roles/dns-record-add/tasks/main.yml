@@ -1,15 +1,11 @@
 ---
-# tasks file for dns-record-add
-- hosts: docker_hosts
-  gather_facts: no
-  tasks:
-    - name: Update hosts file on bastion
-      ansible.builtin.blockinfile:
-        path: /etc/hosts
-        block: |
-          10.10.1.101 worker01
-          10.10.1.102 worker02
-        insertafter: EOF
-        owner: root
-        group: root
-        mode: '0644'
+- name: Add DNS record
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    insertafter: EOF
+    block: |
+      10.10.1.101 worker01
+      10.10.1.102 worker02
+    owner: root
+    group: root
+    mode: '0644'

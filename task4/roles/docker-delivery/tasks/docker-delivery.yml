@@ -1,17 +1,14 @@
 ---
-# tasks file for docker-delivery
-- name: Docker image delivery
-  hosts: docker_hosts
-  gather_facts: no
-  tasks:
-    - name: copy tarball to host
-      copy:
-        src: ./app_v0_1.tar
-        dest: /home/vagrant/app_v0_1.tar
+- name: copy tarball to host
+  copy:
+    src: ./files/app_v0_1.tar
+    dest: /home/vagrant/app_v0_1.tar
+  when: "'build_host' not  in group_names"
 
-    - name: load container from tarball
-      docker_image:
-        name: app:v.0.1
-        load_path: /home/vagrant/app_v0_1.tar
-        state: present
-        source: load
+- name: load container from tarball
+  community.docker.docker_image:
+    name: app:v.0.1
+    load_path: /home/vagrant/app_v0_1.tar
+    state: present
+    source: load
+  when: "'build_host' not  in group_names"
