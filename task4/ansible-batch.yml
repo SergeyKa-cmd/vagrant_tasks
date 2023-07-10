@@ -1,0 +1,22 @@
+---
+- name: Provision for bastion
+  hosts: build_host
+  gather_facts: true
+  become: true
+  roles:
+    - docker-delivery
+    - dns-record-add 
+
+- name: Provision for workers
+  hosts: docker_hosts
+  gather_facts: true
+  become: true
+  roles:
+    - docker-install
+    - docker-delivery
+    - docker-run
+    - keepalived
+    - ip-rules-allow
+    - ip-rules-deny
+    
+

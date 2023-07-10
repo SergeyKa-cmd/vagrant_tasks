@@ -12,7 +12,7 @@
     state: present
   when: ansible_os_family == "Debian"
 
-- name: Keepalived configuration files for VI_1
+- name: Keepalived configuration files for instance_1
   template:
     src: ../templates/keepalived_VI_1.conf.j2
     dest: /etc/keepalived/keepalived.conf
@@ -20,7 +20,7 @@
     - reload keeaplived
   when: ansible_hostname == "worker01"
 
-- name: Keepalived configuration files for VI_2
+- name: Keepalived configuration files for instance_2
   template:
     src: ../templates/keepalived_VI_2.conf.j2
     dest: /etc/keepalived/keepalived.conf
@@ -36,7 +36,7 @@
 - name: Keepalived add iptables rule
   ansible.builtin.iptables:
     chain: INPUT
-    source: 224.0.0.0/8ip a
+    source: 224.0.0.0/8
     in_interface: eth1
     jump: ACCEPT
   become: yes
@@ -51,7 +51,7 @@
   become: yes
   when: ansible_os_family == "Debian"
 
-- name: Keepalived VI_1 | add iptables rule
+- name: Keepalived instance_2 add iptables rule
   ansible.builtin.iptables:
     chain: INPUT
     in_interface: eth1
@@ -60,7 +60,7 @@
   become: yes
   when: ansible_os_family == "RedHat"
 
-- name: Keepalived VI_1 | add iptables rule
+- name: Keepalived instance_1 add iptables rule
   ansible.builtin.iptables:
     chain: INPUT
     in_interface: enp0s8

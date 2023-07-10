@@ -1,6 +1,7 @@
 ---
 # tasks file for docker-delivery
-- hosts: build_host
+- name: Docker image copy
+  hosts: build_host
   gather_facts: no
   tasks:
     - name: build container image

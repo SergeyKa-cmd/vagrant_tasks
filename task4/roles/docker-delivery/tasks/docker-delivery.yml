@@ -1,6 +1,7 @@
 ---
 # tasks file for docker-delivery
-- hosts: docker_hosts
+- name: Docker image delivery
+  hosts: docker_hosts
   gather_facts: no
   tasks:
     - name: copy tarball to host

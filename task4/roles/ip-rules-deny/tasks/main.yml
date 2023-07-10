@@ -1,2 +1,9 @@
 ---
 # tasks file for ip-rules-deny
+- hosts: docker_hosts
+  gather_facts: no
+  tasks:
+    - name: Set the policy for the INPUT chain to DROP
+      ansible.builtin.iptables:
+        chain: INPUT
+        policy: DROP

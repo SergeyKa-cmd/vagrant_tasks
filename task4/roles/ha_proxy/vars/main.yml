@@ -1,8 +1,0 @@
----
-# vars file for ha_proxy
-  server_name_1: web1 
-  private_ip_1: 10.10.0.1
-  server_name_2: web2 
-  private_ip_2: 10.10.0.2
-  port_1: 80
-  port_2: 80

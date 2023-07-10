@@ -1,81 +1,19 @@
-global_defs {
-# UNIQUE #
-  router_id LVS_BCKP
-# UNIQUE #
-}
-
-vrrp_instance VI_1 {
-# UNIQUE #
-  state BACKUP
-  priority 100
-# UNIQUE #
-
-  advert_int 1
-  virtual_router_id {{ router_id }}
-
-# CHANGE TO YOUR NEEDS #
-  # real network interface
-  interface {{ interface }}
-
-  # my ip (on real network)
-  unicast_src_ip {{ backup_IP_VI_1 }}
-
-  # peer ip (on real network)
-  unicast_peer {
-    {{ master_IP_VI_1 }}
-  }
-# CHANGE TO YOUR NEEDS #
-
-  virtual_ipaddress {
-    {{ vIP_VI_1 }}
-  }
-
-  authentication {
-    auth_type PASS
-    auth_pass d0ck3r
-  }
-
-  notify "/container/service/keepalived/assets/notify.custom.sh"
-}
-
-virtual_server {{ vIP }} 80 {
-    delay_loop 5
-    lb_algo wlc
-    lb_kind NAT
-    persistence_timeout 600
-    protocol TCP
-
-    real_server 10.10.0.10 80 {
-        weight 100
-        TCP_CHECK {
-            connect_timeout 10
-        }
-    }
-    real_server 10.10.0.20 80 {
-        weight 100
-        TCP_CHECK {
-            connect_timeout 10
-        }
+vrrp_instance instance_1 {
+    state BACKUP
+    interface {{ interface_rpm }}
+    virtual_router_id {{ instance_1_vrouter }}
+    priority {{ backup_priority }}
+    virtual_ipaddress {
+        10.10.1.101/24 dev eth1 label eth1:1
     }
 }
 
-virtual_server 10.10.0.100 8080 {
-    delay_loop 5
-    lb_algo wlc
-    lb_kind NAT
-    persistence_timeout 600
-    protocol TCP
-
-    real_server 10.10.0.1 8080 {
-        weight 100
-        TCP_CHECK {
-            connect_timeout 10
-        }
-    }
-    real_server 10.10.0.2 8080 {
-        weight 100
-        TCP_CHECK {
-            connect_timeout 10
-        }
+vrrp_instance instance_2 {
+    state MASTER
+    interface {{ interface_rpm }}
+    virtual_router_id {{ instance_2_vrouter }}
+    priority {{ master_priority }}
+    virtual_ipaddress {
+        10.10.1.102/24 dev eth1 label eth1:2
     }
 }

@@ -1,9 +1,8 @@
 ---
 # vars file for keepalived
-  priority_VI_1: 150
-  router_id: 51
-  interface: eth0
-  master_IP_VI_1: 10.10.0.1/24
-  backup_IP_VI_1: 10.10.0.2/24
-  vIP_VI_1: 10.10.0.100/24
-  vIP: 10.10.0.100
+  interface_rpm: enp0s8
+  interface_deb: eth1
+  instance_1_vrouter: 1
+  instance_2_vrouter: 2
+  master_priority: 255
+  backup_priority: 100

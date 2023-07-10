@@ -1,7 +1,7 @@
 ---
 # tasks file for docker-run
 - name: Run docker-compose
-  hosts: all
+  hosts: docker_hosts
   gather_facts: false
   tasks:
     - name: Tear down existing services
