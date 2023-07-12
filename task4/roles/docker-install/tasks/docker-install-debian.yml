@@ -32,17 +32,26 @@
 
 - name: Update apt and install docker-ce
   apt:
-    name: docker-ce
-    state: latest
+    name: 
+      - docker-ce
     update_cache: true
+    state: latest
 
 - name: Install Docker Module for Python
   pip:
-    name: docker
+    name: "{{ item }}"
+  with_items:
+    - pip
+    - setuptools_rust
+    - cryptography 
+    - docker
+    - pyaml
+#    - docker-compose
+  #state: latest
 
 - name: Install docker-compose
   get_url:
-    url : "{{ docker-compose_url }}" 
+    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
     dest: /usr/local/bin/docker-compose
     mode: 'u+x,g+x'
 

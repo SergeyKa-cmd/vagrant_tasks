@@ -1,6 +1,6 @@
 ---
 # vars file for docker-install
-docker-compose_url: "https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64"
+docker-compose_link: "https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64"
 docker_apt_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
 docker_apt_gpg: "https://download.docker.com/linux/ubuntu/gpg"
 docker_yum_gpg: "https://download.docker.com/linux/centos/gpg"

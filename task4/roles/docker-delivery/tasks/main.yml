@@ -1,4 +1,6 @@
 ---
 # tasks file for docker-delivery
 - include_tasks: docker-copy.yml
+  when: "'docker_hosts' not  in group_names"
 - include_tasks: docker-delivery.yml
+  when: "'build_host' not  in group_names"

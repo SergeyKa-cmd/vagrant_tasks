@@ -1,9 +1,9 @@
 ---
 - name: copy tarball to host
   copy:
-    src: ./files/app_v0_1.tar
+    src: /home/vagrant/vagrant_tasks/task4/roles/docker-delivery/files/app_v0_1.tar
     dest: /home/vagrant/app_v0_1.tar
-  when: "'build_host' not  in group_names"
+#  when: "'build_host' not  in group_names"
 
 - name: load container from tarball
   community.docker.docker_image:
@@ -11,4 +11,4 @@
     load_path: /home/vagrant/app_v0_1.tar
     state: present
     source: load
-  when: "'build_host' not  in group_names"
+ # when: "'build_host' not  in group_names"

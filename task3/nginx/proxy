@@ -1,7 +1,6 @@
 server {
     listen 443 ssl;
-        #root /var/www/html;
-        #index index.html index.htm index.nginx-debian.html;
+        ssl on;
         ssl_certificate_key /etc/nginx/cert/domain.key;
         ssl_certificate /etc/nginx/cert/dmain.crt;
         ssl_password_file /etc/nginx/cert/pass;
@@ -10,10 +9,9 @@ server {
         
         server_name bastion;
         location / {
-
-            proxy_pass http://localhost:5000;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header        Host $host;
+        proxy_pass http://app:5000/;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
         }
 

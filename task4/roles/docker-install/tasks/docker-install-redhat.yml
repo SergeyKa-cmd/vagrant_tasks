@@ -15,33 +15,51 @@
     - yum-utils
     - device-mapper-persistent-data
     - lvm2
+  #  - python-docker-py
+    - python3-pip
+  #  - virtualenv
+    - python-setuptools
 
 - name: Add Docker GPG key
   ansible.builtin.rpm_key:
     key: "{{ docker_yum_gpg }}"
     state: present
 
-- name: Add Docker repo
-  ansible.builtin.yum_repository:
-    name: docker
-    description: docker repository
-    baseurl: "{{ docker_yum_repo }}"
-    enabled: true
-    gpgcheck: true
-    gpgkey: "{{ docker_yum_gpg }}"
+#- name: Add Docker repo
+#  shell: yum-config-manager --add-repo="{{ docker_yum_repo }}"
+#  args:
+#    creates: /etc/yum.repos.d/docker-ce.repo 
+
+#- name: Add Docker repo
+#  ansible.builtin.yum_repository:
+#    name: docker
+#    description: docker repository
+#    baseurl: "{{ docker_yum_repo }}"
+#    enabled: true
+#    gpgcheck: true
+#    gpgkey: "{{ docker_yum_gpg }}"
     #state: present
 
 - name: Install Docker
   package:
     name: 
       - docker-ce
-      - containerd.io
     state: latest
     update_cache: yes
 
+#- name: Install Docker Module for Python
+#  pip:
+#    name: "{{ item }}"
+#  with_items:
+#    - pip
+#    - setuptools_rust
+#    - cryptography
+#    - docker
+#    - docker-compose
+
 - name: Install docker-compose
   get_url:
-    url : "{{ docker-compose_link }}"
+    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
     dest: /usr/local/bin/docker-compose
     mode: 'u+x,g+x'
 
