@@ -9,15 +9,16 @@
 - name: Install required packages
   apt:
     name: "{{ item }}"
-    state: latest
+    state: present
+  check_mode: true
   with_items:
     - apt-transport-https
     - ca-certificates
     - software-properties-common
     - gnupg
-    - python3-pip
-    - virtualenv
-    - python3-setuptools
+    - python3-docker
+   # - virtualenv
+    #- python3-setuptools
 
 - name: Add Docker GPG key
   apt_key:
@@ -40,13 +41,15 @@
 - name: Install Docker Module for Python
   pip:
     name: "{{ item }}"
+    state: present
+  check_mode: true
   with_items:
     - pip
     - setuptools_rust
-    - cryptography 
-    - docker
-    - pyaml
-#    - docker-compose
+    - wheel
+#    - docker
+#    - pyaml
+    - docker-compose
   #state: latest
 
 - name: Install docker-compose

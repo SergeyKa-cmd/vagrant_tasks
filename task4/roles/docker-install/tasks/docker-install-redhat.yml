@@ -7,23 +7,29 @@
       - docker-engine
     state: absent
 
-- name: Install required packages
-  yum:
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - yum-utils
-    - device-mapper-persistent-data
-    - lvm2
-  #  - python-docker-py
-    - python3-pip
-  #  - virtualenv
-    - python-setuptools
-
 - name: Add Docker GPG key
   ansible.builtin.rpm_key:
     key: "{{ docker_yum_gpg }}"
     state: present
+    
+- name: Add Docker repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: Enable Docker Edge repo
+  ini_file:
+    dest: /etc/yum.repos.d/docker-ce.repo
+    section: 'docker-ce-edge'
+    option: enabled
+    value: 0
+
+- name: Enable Docker Test repo
+  ini_file:
+    dest: /etc/yum.repos.d/docker-ce.repo
+    section: 'docker-ce-test'
+    option: enabled
+    value: 0
 
 #- name: Add Docker repo
 #  shell: yum-config-manager --add-repo="{{ docker_yum_repo }}"
@@ -38,18 +44,35 @@
 #    enabled: true
 #    gpgcheck: true
 #    gpgkey: "{{ docker_yum_gpg }}"
-    #state: present
+#    state: present
 
 - name: Install Docker
-  package:
-    name: 
-      - docker-ce
+  yum:
+    name: docker-ce
     state: latest
-    update_cache: yes
+    update_cache: true
+  check_mode: true
+
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  check_mode: true
+  with_items:
+    - epel-release
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    - python-docker-py
+    - python3-pip
+    - python3-virtualenv
+    - python-setuptools
 
 #- name: Install Docker Module for Python
 #  pip:
 #    name: "{{ item }}"
+#    state: present
+#  check_mode: true
 #  with_items:
 #    - pip
 #    - setuptools_rust

@@ -1,11 +1,14 @@
 ---
-- name: Tear down existing services
+- name: Stop existing services
   community.docker.docker_compose:
-    project_src: ./files
+    project_src: /home/vagrant
     state: absent
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
 - name: Create and start services
   community.docker.docker_compose:
-    project_src: ./files
+    project_src: /home/vagrant
     build: true
-
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

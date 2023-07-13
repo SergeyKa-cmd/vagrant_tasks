@@ -1,7 +1,7 @@
 ---
 # vars file for keepalived
-  interface_rpm: enp0s8
-  interface_deb: eth1
+  interface_deb: enp0s8
+  interface_rpm: eth1
   instance_1_vrouter: 1
   instance_2_vrouter: 2
   master_priority: 255

@@ -1,9 +1,9 @@
 ---
-- name: Iptables flush filter
-  ansible.builtin.iptables:
-    chain: "{{ item }}"
-    flush: yes
-  with_items:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
+#- name: Iptables flush filter
+#  ansible.builtin.iptables:
+#    chain: "{{ item }}"
+#    flush: yes
+#  with_items:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
 
 - name: Iptables flush nat
   ansible.builtin.iptables:
@@ -20,7 +20,7 @@
     destination_ports:
       - "80"
       - "443"
-      - "22:22"
+      - "22"
     jump: ACCEPT
 
 - name: Allow output connection to bastion

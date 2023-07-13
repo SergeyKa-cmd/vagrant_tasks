@@ -1,0 +1,35 @@
+---
+# tasks file for keepalived
+- name: Keepalived Install package
+  yum:
+    name: keepalived
+    state: present
+
+- name: Keepalived configuration files for instance_2
+  template:
+    src: ../templates/keepalived_VI_2.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify: restart keepalived
+
+- name: Keepalived start service
+  service:
+    name: keepalived
+    state: started
+    enabled: yes
+
+- name: Keepalived add iptables rule
+  ansible.builtin.iptables:
+    chain: INPUT
+    source: 224.0.0.0/8
+    in_interface: eth1
+    jump: ACCEPT
+  become: yes
+
+- name: Keepalived instance_2 add iptables rule
+  ansible.builtin.iptables:
+    chain: INPUT
+    in_interface: eth1
+    protocol: tcp
+    destination_port: 112
+    jump: ACCEPT
+  become: yes

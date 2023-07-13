@@ -1,0 +1,6 @@
+---
+# tasks file for dns-records-add
+- include_tasks: dns-build-host.yaml
+  when: "'docker_hosts' not  in group_names"
+#- include_tasks: dns-docker-hosts.yaml
+#  when: "'build_host' not  in group_names"

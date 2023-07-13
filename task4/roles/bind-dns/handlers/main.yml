@@ -1,0 +1,7 @@
+---
+# handlers file for bind-dns
+- name: bind systemd
+  systemd:
+    name: bind9
+    enabled: yes
+    state: started

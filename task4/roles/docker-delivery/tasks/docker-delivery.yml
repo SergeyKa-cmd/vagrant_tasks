@@ -1,9 +1,19 @@
 ---
-- name: copy tarball to host
-  copy:
+#- name: Create docker deploy dir
+#  ansible.builtin.file:
+#    path: /home/vagrant/task4
+#    state: directory
+#    mode: '0755'
+
+- name: copy docker image to host
+  ansible.builtin.copy:
     src: /home/vagrant/vagrant_tasks/task4/roles/docker-delivery/files/app_v0_1.tar
     dest: /home/vagrant/app_v0_1.tar
-#  when: "'build_host' not  in group_names"
+
+- name: copy docker image to host
+  ansible.builtin.copy:
+    src: /home/vagrant/vagrant_tasks/task4/roles/docker-delivery/files/docker-bundle.tar.gz
+    dest: /home/vagrant/docker-bundle.tar.tgz
 
 - name: load container from tarball
   community.docker.docker_image:
@@ -11,4 +21,9 @@
     load_path: /home/vagrant/app_v0_1.tar
     state: present
     source: load
- # when: "'build_host' not  in group_names"
+
+- name: Unarchive a project dir from bastion
+  ansible.builtin.unarchive:
+    src: /home/vagrant/docker-bundle.tar.tgz
+    dest: /home/vagrant/
+    remote_src: yes
