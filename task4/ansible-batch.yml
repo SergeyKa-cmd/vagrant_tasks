@@ -5,7 +5,7 @@
   become: true
   roles:
     - docker-delivery
-    - bind-dns
+   # - bind-dns
     - dns-record-add 
 
 - name: Provision for workers
@@ -13,8 +13,8 @@
   gather_facts: true
   become: true
   roles:
-#    - docker-install
-#    - docker-delivery
+    - docker-install
+    - docker-delivery
     - docker-run
     - keepalived
     - ip-rules-allow

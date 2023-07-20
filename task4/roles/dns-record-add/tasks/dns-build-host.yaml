@@ -4,8 +4,7 @@
     path: /etc/hosts
     insertafter: EOF
     block: |
-      10.10.1.101 worker01
-      10.10.1.102 worker02
+      10.10.1.101 bastion
     owner: root
     group: root
     mode: '0644'

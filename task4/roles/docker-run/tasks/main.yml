@@ -1,14 +1,15 @@
 ---
-- name: Stop existing services
-  community.docker.docker_compose:
-    project_src: /home/vagrant
-    state: absent
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-
-- name: Create and start services
-  community.docker.docker_compose:
-    project_src: /home/vagrant
-    build: true
+- name: Create and re-create container
+  community.docker.docker_container:
+    name: "{{ image_name }}"
+    image: "{{ image_name }}:{{ image_tag }}"
+   # state: started
+   # recreate: true 
+    ports:
+      - "5000:5000"
+    cap_drop:
+      - all
+    capabilities:
+      - CHOWN
   vars:
     ansible_python_interpreter: /usr/bin/python3

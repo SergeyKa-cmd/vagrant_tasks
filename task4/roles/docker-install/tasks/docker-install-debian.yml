@@ -1,11 +1,4 @@
 ---
-- name: Ensure old versions of Docker are not installed.
-  package:
-    name:
-      - docker
-      - docker-engine
-    state: absent
-
 - name: Install required packages
   apt:
     name: "{{ item }}"
@@ -17,8 +10,6 @@
     - software-properties-common
     - gnupg
     - python3-docker
-   # - virtualenv
-    #- python3-setuptools
 
 - name: Add Docker GPG key
   apt_key:
@@ -37,29 +28,28 @@
       - docker-ce
     update_cache: true
     state: latest
-
-- name: Install Docker Module for Python
-  pip:
-    name: "{{ item }}"
-    state: present
   check_mode: true
-  with_items:
-    - pip
-    - setuptools_rust
-    - wheel
-#    - docker
-#    - pyaml
-    - docker-compose
-  #state: latest
 
-- name: Install docker-compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
-    dest: /usr/local/bin/docker-compose
-    mode: 'u+x,g+x'
+
+#- name: Install Docker Module for Python
+#  pip:
+#    name: "{{ item }}"
+#    state: present
+#  check_mode: true
+#  with_items:
+#    - pip
+#    - setuptools_rust
+#    - wheel
+#    - docker-compose
+
+#- name: Install docker-compose
+#  get_url:
+#    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
+#    dest: /usr/local/bin/docker-compose
+#    mode: 'u+x,g+x'
 
 - name: Start Docker service
   service:
     name: docker
     state: started
-    enabled: yes        
+    enabled: yes

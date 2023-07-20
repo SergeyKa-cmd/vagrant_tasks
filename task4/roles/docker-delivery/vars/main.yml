@@ -1,2 +1,5 @@
 ---
 # vars file for docker-delivery
+app_dir: /home/vagrant/task
+image_name: app
+image_tag: v.0.2

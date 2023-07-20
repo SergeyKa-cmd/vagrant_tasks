@@ -5,12 +5,38 @@
 #    flush: yes
 #  with_items:  [ 'INPUT', 'FORWARD', 'OUTPUT' ]
 
-- name: Iptables flush nat
+#- name: Iptables flush nat
+#  ansible.builtin.iptables:
+#    table: nat
+#    chain: '{{ item }}'
+#    flush: yes
+#  with_items: [ 'INPUT', 'OUTPUT', 'PREROUTING', 'POSTROUTING' ]
+
+- name: Forward port 443 to 5000
   ansible.builtin.iptables:
     table: nat
-    chain: '{{ item }}'
-    flush: yes
-  with_items: [ 'INPUT', 'OUTPUT', 'PREROUTING', 'POSTROUTING' ]
+    chain: PREROUTING
+    in_interface: eth1
+    protocol: tcp
+    match: tcp
+    destination_port: 443
+    jump: REDIRECT
+    to_ports: 5000
+    comment: Redirect https traffic to port 5000
+  when: ansible_os_family == 'RedHat'
+
+- name: Forward port 443 to 5000
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    in_interface: enp0s8
+    protocol: tcp
+    match: tcp
+    destination_port: 443
+    jump: REDIRECT
+    to_ports: 5000
+    comment: Redirect https traffic to port 5000
+  when: ansible_os_family == 'Debian'
 
 - name: Allow connections on multiple ports from bastion
   ansible.builtin.iptables:
@@ -27,5 +53,5 @@
   ansible.builtin.iptables:
     chain: OUTPUT
     protocol: tcp
-    destination: 10.10.0.10     
+    destination: 10.10.0.10
     jump: ACCEPT

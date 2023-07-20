@@ -5,8 +5,8 @@
     insertafter: EOF
     block: |
       10.10.0.10 bastion
-      10.10.0.20 worker01
-      10.10.0.30 worker02
+      10.10.0.101 worker01
+      10.10.0.102 worker02
     owner: root
     group: root
     mode: '0644'

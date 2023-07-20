@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request
 import socket
+from flask_socketio import SocketIO
+
+context = ('domain.pem', 'domain.key')
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 @app.route('/greetings')
 def greetings():
-    ip_client = request.headers.get('X-Forwarded-For')
+    #ip_client = request.headers.get('X-Forwarded-For')
+    ip_client = request.environ['REMOTE_ADDR']
     ip_server = request.remote_addr
     return render_template('index.html', ip_address_of_client=ip_client, server_ip=ip_server)
 if __name__ == "__main__":
   ip_host = socket.gethostbyname(socket.gethostname())
-  app.run(host = ip_host, port=5000)
+  socketio.run(app, host = ip_host, ssl_context=context)

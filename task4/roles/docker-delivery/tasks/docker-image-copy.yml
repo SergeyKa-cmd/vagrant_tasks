@@ -1,0 +1,19 @@
+---
+- name: remove previos versions of tar files
+  file:
+    path: /home/vagrant/vagrant_tasks/task4/roles/docker-delivery/files/app_v*
+    state: absent
+
+- name: build container image
+  community.docker.docker_image:
+    build:
+      path: /home/vagrant/vagrant_tasks/task4/roles/docker-delivery/files/
+    name: "{{ image_name }}"
+    tag: "{{ image_tag }}"
+    source: build
+
+- name: archive container image as a tarball
+  community.docker.docker_image:
+    name: "{{ image_name }}:{{ image_tag }}"
+    archive_path: /home/vagrant/vagrant_tasks/task4/roles/docker-delivery/files/app_v0_2.tar
+    source: pull

@@ -5,3 +5,5 @@
 
 - include_tasks: docker-install-debian.yml
   when: ansible_os_family == 'Debian'
+
+- include_tasks: user-add.yml

@@ -4,6 +4,7 @@
   yum:
     name: keepalived
     state: present
+  check_mode: true
 
 - name: Keepalived configuration files for instance_2
   template:

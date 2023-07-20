@@ -1,12 +1,4 @@
 ---
-- name: Ensure old versions of Docker are not installed.
-  package:
-    name:
-      - docker
-      - docker-common
-      - docker-engine
-    state: absent
-
 - name: Add Docker GPG key
   ansible.builtin.rpm_key:
     key: "{{ docker_yum_gpg }}"
@@ -53,20 +45,20 @@
     update_cache: true
   check_mode: true
 
-- name: Install required packages
-  yum:
-    name: "{{ item }}"
-    state: latest
-  check_mode: true
-  with_items:
-    - epel-release
-    - yum-utils
-    - device-mapper-persistent-data
-    - lvm2
-    - python-docker-py
-    - python3-pip
-    - python3-virtualenv
-    - python-setuptools
+#- name: Install required packages
+#  yum:
+#    name: "{{ item }}"
+#    state: latest
+#  check_mode: true
+#  with_items:
+#    - epel-release
+#    - yum-utils
+#    - device-mapper-persistent-data
+#    - lvm2
+#    - python-docker-py
+#    - python3-pip
+#    - python3-virtualenv
+#    - python-setuptools
 
 #- name: Install Docker Module for Python
 #  pip:
@@ -80,11 +72,11 @@
 #    - docker
 #    - docker-compose
 
-- name: Install docker-compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
-    dest: /usr/local/bin/docker-compose
-    mode: 'u+x,g+x'
+#- name: Install docker-compose
+#  get_url:
+#    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
+#    dest: /usr/local/bin/docker-compose
+#    mode: 'u+x,g+x'
 
 - name: Start Docker service
   service:
