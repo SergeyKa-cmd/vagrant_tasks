@@ -1,0 +1,17 @@
+$TTL    604800
+; SOA record with MNAME and RNAME updated
+@       IN      SOA     bastion. root.bastion. (
+                              2         ; Serial Note: increment after each change
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+; Name server record 
+@       IN      NS      bindserver.bastion.
+; A record for name server
+bindserver      IN      A       10.10.10.1
+; PTR record for name server
+1   IN      PTR     bindserver.bastion
+; PTR record for clients
+2   IN      PTR     worker01.bastion
+3   IN      PTR     worker02.bastion

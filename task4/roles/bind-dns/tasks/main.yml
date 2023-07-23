@@ -1,13 +1,6 @@
 ---
-# tasks file for bind-dns
-- name: Install Bind
-  apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-   - bind9
-   - dnsutils
-  when:
-    ansible_os_family == "Debian"
-  notify:
-    - bind systemd
+# tasks file for docker-delivery
+- include_tasks: dns-config-bastion.yml
+  when: "'build_host' in group_names"
+- include_tasks: dns-config-workers.yml
+  when: "'docker_hosts' in group_names"

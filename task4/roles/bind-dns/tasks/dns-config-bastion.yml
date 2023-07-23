@@ -1,0 +1,58 @@
+---
+# tasks file for bind-dns
+- name: Install Bind
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+   - bind9
+   - bind9utils
+   - dnsutils
+  when:
+    ansible_os_family == "Debian"
+  notify:
+    - bind restart
+
+- name: Copy named.conf.options file
+  ansible.builtin.copy:
+    src:  /home/vagrant/vagrant_tasks/task4/roles/bind-dns/files/named.conf.options
+    dest: /etc/bind/named.conf.options
+    mode: 0644
+    owner: root
+    group: named
+    validate: /usr/sbin/named-checkconf -z -j %s
+ # notify:
+ # - bind restart
+
+- name: Copy named.conf.local file
+  ansible.builtin.copy:
+    src:  /home/vagrant/vagrant_tasks/task4/roles/bind-dns/files/named.conf.local
+    dest: /etc/bind/named.conf.local
+    mode: 0644
+    owner: root
+    group: named
+    validate: /usr/sbin/named-checkconf -z -j %s
+ # notify:
+ # - bind restart
+
+- name: Copy DNS zone file
+  ansible.builtin.copy:
+    src:  /home/vagrant/vagrant_tasks/task4/roles/bind-dns/files/bastion.zone
+    dest: /etc/bind/zones/bastion.zone
+    mode: 0644
+    owner: root
+    group: named
+    validate: /usr/sbin/named-checkzone bastion.zone /etc/bind/zones/bastion.zone %s
+ # notify:
+ # - bind restart
+
+- name: Copy DNS reverse zone file
+  ansible.builtin.copy:
+    src:  /home/vagrant/vagrant_tasks/task4/roles/bind-dns/files/bastion.zone.rev
+    dest: /etc/bind/zones/bastion.zone.rev
+    mode: 0644
+    owner: root
+    group: named
+    validate: /usr/sbin/named-checkzone bastion.zone /etc/bind/zones/bastion.zone.rev %s
+  notify:
+  - bind restart

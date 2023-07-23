@@ -1,0 +1,10 @@
+// allow only LAN traffic from 10.10.0.0-10.10.0.255
+acl LAN {
+10.10.0.0/24;
+};
+options {
+        directory "/var/cache/bind"; // default directory
+        allow-query { localhost; LAN; }; // allow queries from localhost and 10.10.0.0-10.10.0.255
+        forwarders { 77.88.8.8; }; // use Yandex DNS as a forwarder
+        recursion yes;  // allow recursive queries
+};

@@ -1,6 +1,6 @@
 ---
 # handlers file for bind-dns
-- name: bind systemd
+- name: bind restart
   systemd:
     name: bind9
     enabled: yes
