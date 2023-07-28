@@ -2,5 +2,9 @@
 # tasks file for docker-delivery
 - include_tasks: dns-config-bastion.yml
   when: "'build_host' in group_names"
-- include_tasks: dns-config-workers.yml
-  when: "'docker_hosts' in group_names"
+- include_tasks: dns-config-workers-redhat.yml
+  when: ("'docker_hosts' in group_names") and 
+        (ansible_os_family == 'RedHat')
+- include_tasks: dns-config-workers-debian.yml
+  when: ("'docker_hosts' in group_names") and 
+        (ansible_os_family == 'Debian')

@@ -3,7 +3,6 @@
   apt:
     name: "{{ item }}"
     state: present
-  check_mode: true
   with_items:
     - apt-transport-https
     - ca-certificates
@@ -22,33 +21,14 @@
     state: present
     update_cache: yes
 
-- name: Update apt and install docker-ce
+- name: Update apt and install docker-ce debian
   apt:
     name: 
       - docker-ce
     update_cache: true
     state: latest
-  check_mode: true
 
-
-#- name: Install Docker Module for Python
-#  pip:
-#    name: "{{ item }}"
-#    state: present
-#  check_mode: true
-#  with_items:
-#    - pip
-#    - setuptools_rust
-#    - wheel
-#    - docker-compose
-
-#- name: Install docker-compose
-#  get_url:
-#    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
-#    dest: /usr/local/bin/docker-compose
-#    mode: 'u+x,g+x'
-
-- name: Start Docker service
+- name: Start Docker service debian
   service:
     name: docker
     state: started

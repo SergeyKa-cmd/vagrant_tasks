@@ -1,8 +1,8 @@
-zone "bastion" IN { \\ define the forward zone
+zone "bastion" {
         type master;
         file "/etc/bind/zones/bastion.zone";
 };
-zone "10.10.10.in-addr.arpa" IN { \\ define the reverse zone
+zone "10.0.10.in-addr.arpa" {
         type master;
         file "/etc/bind/zones/bastion.zone.rev";
 };

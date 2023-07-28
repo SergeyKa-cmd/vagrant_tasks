@@ -1,0 +1,10 @@
+---
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s8:
+      addresses:
+      - "{{ ansible_host }}"/24
+      nameservers:
+        addresses: [10.10.0.10]

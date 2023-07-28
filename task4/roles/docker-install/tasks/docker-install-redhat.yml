@@ -23,62 +23,26 @@
     option: enabled
     value: 0
 
-#- name: Add Docker repo
-#  shell: yum-config-manager --add-repo="{{ docker_yum_repo }}"
-#  args:
-#    creates: /etc/yum.repos.d/docker-ce.repo 
-
-#- name: Add Docker repo
-#  ansible.builtin.yum_repository:
-#    name: docker
-#    description: docker repository
-#    baseurl: "{{ docker_yum_repo }}"
-#    enabled: true
-#    gpgcheck: true
-#    gpgkey: "{{ docker_yum_gpg }}"
-#    state: present
-
-- name: Install Docker
+- name: Install Docker redhat
   yum:
     name: docker-ce
     state: latest
     update_cache: true
-  check_mode: true
 
-#- name: Install required packages
-#  yum:
-#    name: "{{ item }}"
-#    state: latest
-#  check_mode: true
-#  with_items:
-#    - epel-release
-#    - yum-utils
-#    - device-mapper-persistent-data
-#    - lvm2
-#    - python-docker-py
-#    - python3-pip
-#    - python3-virtualenv
-#    - python-setuptools
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - epel-release
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    - python-docker-py
+    - python3-pip
+    - python-setuptools
 
-#- name: Install Docker Module for Python
-#  pip:
-#    name: "{{ item }}"
-#    state: present
-#  check_mode: true
-#  with_items:
-#    - pip
-#    - setuptools_rust
-#    - cryptography
-#    - docker
-#    - docker-compose
-
-#- name: Install docker-compose
-#  get_url:
-#    url: https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64
-#    dest: /usr/local/bin/docker-compose
-#    mode: 'u+x,g+x'
-
-- name: Start Docker service
+- name: Start Docker service redhat
   service:
     name: docker
     state: started

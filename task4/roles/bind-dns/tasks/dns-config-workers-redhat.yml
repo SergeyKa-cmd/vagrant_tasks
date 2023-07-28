@@ -1,0 +1,10 @@
+---
+- name: Add primary DNS record redhat
+  ansible.builtin.blockinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-eth1
+    insertafter: EOF
+    block: |
+      DNS1=10.10.0.10
+    owner: root
+    group: root
+    mode: '0644'

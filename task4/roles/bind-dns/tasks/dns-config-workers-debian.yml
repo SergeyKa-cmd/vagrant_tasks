@@ -1,0 +1,20 @@
+---
+- name: Remove old netplan config files.
+  ansible.builtin.file:
+    path: /etc/netplan/50-vagrant.yaml
+    state: absent
+
+- name: Copy the new netplan config file
+  ansible.builtin.template:
+    src: /home/vagrant/vagrant_tasks/task4/roles/bind-dns/files/50-vagrant.yaml.j2
+    dest: /etc/netplan/50-vagrant.yaml
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+- name: Apply and reload the new static ip address with netplan
+  command: netplan apply
+  become: true
+  async: 100
+  poll: 0

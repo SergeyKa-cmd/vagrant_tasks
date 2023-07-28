@@ -10,8 +10,22 @@
    - dnsutils
   when:
     ansible_os_family == "Debian"
-  notify:
-    - bind restart
+
+- name: Create a zone directory
+  ansible.builtin.file:
+    path: /etc/bind/zones
+    state: directory
+    mode: '0755'
+
+- name: Remove old files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/bind/named.conf.options
+    - /etc/bind/named.conf.local
+    - /etc/bind/bastion.zone
+    - /etc/bind/bastion.zone.rev
 
 - name: Copy named.conf.options file
   ansible.builtin.copy:
@@ -19,10 +33,7 @@
     dest: /etc/bind/named.conf.options
     mode: 0644
     owner: root
-    group: named
-    validate: /usr/sbin/named-checkconf -z -j %s
- # notify:
- # - bind restart
+    group: bind
 
 - name: Copy named.conf.local file
   ansible.builtin.copy:
@@ -30,10 +41,7 @@
     dest: /etc/bind/named.conf.local
     mode: 0644
     owner: root
-    group: named
-    validate: /usr/sbin/named-checkconf -z -j %s
- # notify:
- # - bind restart
+    group: bind
 
 - name: Copy DNS zone file
   ansible.builtin.copy:
@@ -41,10 +49,7 @@
     dest: /etc/bind/zones/bastion.zone
     mode: 0644
     owner: root
-    group: named
-    validate: /usr/sbin/named-checkzone bastion.zone /etc/bind/zones/bastion.zone %s
- # notify:
- # - bind restart
+    group: bind
 
 - name: Copy DNS reverse zone file
   ansible.builtin.copy:
@@ -52,7 +57,6 @@
     dest: /etc/bind/zones/bastion.zone.rev
     mode: 0644
     owner: root
-    group: named
-    validate: /usr/sbin/named-checkzone bastion.zone /etc/bind/zones/bastion.zone.rev %s
+    group: bind
   notify:
   - bind restart

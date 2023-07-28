@@ -16,6 +16,7 @@
     - docker-install
     - docker-delivery
     - docker-run
+    - bind-dns
     - keepalived
     - ip-rules-allow
 #    - ip-rules-deny
