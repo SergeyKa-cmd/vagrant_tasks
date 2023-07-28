@@ -1,4 +1,5 @@
 - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.41.2/deploy/static/provider/cloud/deploy.yaml
 - curl -X POST "https://api.cloudflare.com/client/v4/zones/9152ec3c08b1a4faeaa95353a929fcc5/dns_records" -H "Authorization: Bearer r6EhzlIilHr0fUu9BRBVm7zV4GPkb6hcaVsvYBb5" -H "Content-Type:application/json" --data '{"type":"A","name":"${domain name}","content":"${ip address}","proxied":false}'
+- kubectl create secret tls kube-app-tls --namespace ingress-nginx --key domain.key --cert dmain.crt
 - helm upgrade --install kube-app ./ -n ingress-nginx
 - kubectl get ing --all-namespaces
